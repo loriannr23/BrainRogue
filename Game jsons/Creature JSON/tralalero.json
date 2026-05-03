@@ -1,0 +1,115 @@
+[
+  {
+    "id": "trala_kid",
+    "name": "Trala Kid",
+    "stage": 1,
+    "types": ["Water"],
+    "rarity": "common",
+    "role": "early_speed_support",
+    "spriteKey": "trala_kid",
+    "catchable": true,
+    "description": "A goofy little shark with sneakers that moves quickly and builds rhythm through simple buffs.",
+    "baseStats": {
+      "hp": 50,
+      "attack": 40,
+      "defense": 45,
+      "spAttack": 55,
+      "spDefense": 50,
+      "speed": 72
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["rhythm_buff"],
+    "hiddenAbility": "flow_state",
+    "evolution": {
+      "evolvesTo": "tralalero",
+      "method": "level",
+      "level": 17
+    },
+    "evolutionLine": ["trala_kid", "tralalero", "tralalero_tralala"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "splash_tap" },
+      { "level": 1, "moveId": "mini_boost" },
+      { "level": 6, "moveId": "quick_step" },
+      { "level": 10, "moveId": "focus_wave" },
+      { "level": 14, "moveId": "speed_boost" }
+    ],
+    "signatureMoveFamily": "tralala"
+  },
+  {
+    "id": "tralalero",
+    "name": "Tralalero",
+    "stage": 2,
+    "types": ["Water"],
+    "rarity": "uncommon",
+    "role": "midgame_buff_engine",
+    "spriteKey": "tralalero",
+    "catchable": true,
+    "description": "It builds momentum through rhythm, chaining buffs to gradually overpower opponents.",
+    "baseStats": {
+      "hp": 70,
+      "attack": 55,
+      "defense": 65,
+      "spAttack": 80,
+      "spDefense": 75,
+      "speed": 80
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["rhythm_buff"],
+    "hiddenAbility": "flow_state",
+    "evolution": {
+      "evolvesTo": "tralalero_tralala",
+      "method": "level",
+      "level": 37
+    },
+    "evolutionLine": ["trala_kid", "tralalero", "tralalero_tralala"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "splash_tap" },
+      { "level": 1, "moveId": "mini_boost" },
+      { "level": 6, "moveId": "quick_step" },
+      { "level": 10, "moveId": "focus_wave" },
+      { "level": 14, "moveId": "speed_boost" },
+      { "level": 20, "moveId": "aqua_flow" },
+      { "level": 26, "moveId": "stack_boost" },
+      { "level": 32, "moveId": "sustain_wave" }
+    ],
+    "signatureMoveFamily": "tralala"
+  },
+  {
+    "id": "tralalero_tralala",
+    "name": "Tralalero Tralala",
+    "stage": 3,
+    "types": ["Water", "Sound"],
+    "rarity": "rare",
+    "role": "late_game_scaling_support",
+    "spriteKey": "tralalero_tralala",
+    "catchable": false,
+    "description": "A rhythmic master that builds unstoppable momentum through perfectly chained buffs.",
+    "baseStats": {
+      "hp": 95,
+      "attack": 65,
+      "defense": 85,
+      "spAttack": 105,
+      "spDefense": 100,
+      "speed": 68
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["rhythm_buff", "crescendo_flow"],
+    "hiddenAbility": "flow_state",
+    "evolution": null,
+    "evolutionLine": ["trala_kid", "tralalero", "tralalero_tralala"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "splash_tap" },
+      { "level": 1, "moveId": "mini_boost" },
+      { "level": 6, "moveId": "quick_step" },
+      { "level": 10, "moveId": "focus_wave" },
+      { "level": 14, "moveId": "speed_boost" },
+      { "level": 20, "moveId": "aqua_flow" },
+      { "level": 26, "moveId": "stack_boost" },
+      { "level": 32, "moveId": "sustain_wave" },
+      { "level": 37, "moveId": "symphony_boost" },
+      { "level": 44, "moveId": "crescendo" },
+      { "level": 50, "moveId": "finale_wave" }
+    ],
+    "signatureMoveFamily": "tralala"
+  }
+]

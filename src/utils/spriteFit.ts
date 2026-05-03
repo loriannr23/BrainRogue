@@ -1,0 +1,1 @@
+export { fitSpriteToBox } from './fitSpriteToBox';

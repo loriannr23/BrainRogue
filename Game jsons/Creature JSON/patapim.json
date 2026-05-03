@@ -1,0 +1,115 @@
+[
+  {
+    "id": "patapim",
+    "name": "Patapim",
+    "stage": 1,
+    "types": ["Nature"],
+    "rarity": "common",
+    "role": "early_control_disruptor",
+    "spriteKey": "patapim",
+    "catchable": true,
+    "description": "A strange forest creature that slows its enemies with creeping roots. Weak alone, but dangerous with setup.",
+    "baseStats": {
+      "hp": 52,
+      "attack": 40,
+      "defense": 48,
+      "spAttack": 55,
+      "spDefense": 52,
+      "speed": 50
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["root_control"],
+    "hiddenAbility": "deep_roots",
+    "evolution": {
+      "evolvesTo": "patapim_turbo",
+      "method": "level",
+      "level": 18
+    },
+    "evolutionLine": ["patapim", "patapim_turbo", "brr_brr_patapim"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "vine_tap" },
+      { "level": 1, "moveId": "slow_spores" },
+      { "level": 6, "moveId": "root_nudge" },
+      { "level": 10, "moveId": "nature_guard" },
+      { "level": 14, "moveId": "entangle" }
+    ],
+    "signatureMoveFamily": "patapim"
+  },
+  {
+    "id": "patapim_turbo",
+    "name": "Patapim Turbo",
+    "stage": 2,
+    "types": ["Nature"],
+    "rarity": "uncommon",
+    "role": "midgame_control_engine",
+    "spriteKey": "patapim_turbo",
+    "catchable": true,
+    "description": "Its roots spread faster and tighter, making it harder for enemies to escape once slowed.",
+    "baseStats": {
+      "hp": 68,
+      "attack": 50,
+      "defense": 65,
+      "spAttack": 75,
+      "spDefense": 68,
+      "speed": 60
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["root_control"],
+    "hiddenAbility": "deep_roots",
+    "evolution": {
+      "evolvesTo": "brr_brr_patapim",
+      "method": "level",
+      "level": 38
+    },
+    "evolutionLine": ["patapim", "patapim_turbo", "brr_brr_patapim"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "vine_tap" },
+      { "level": 1, "moveId": "slow_spores" },
+      { "level": 6, "moveId": "root_nudge" },
+      { "level": 10, "moveId": "nature_guard" },
+      { "level": 14, "moveId": "entangle" },
+      { "level": 20, "moveId": "binding_roots" },
+      { "level": 26, "moveId": "growth_drain" },
+      { "level": 32, "moveId": "control_field" }
+    ],
+    "signatureMoveFamily": "patapim"
+  },
+  {
+    "id": "brr_brr_patapim",
+    "name": "Brr Brr Patapim",
+    "stage": 3,
+    "types": ["Nature", "Noise"],
+    "rarity": "rare",
+    "role": "late_game_control_master",
+    "spriteKey": "brr_brr_patapim",
+    "catchable": false,
+    "description": "A chaotic forest entity that locks enemies in place and slowly overwhelms them with control and decay.",
+    "baseStats": {
+      "hp": 92,
+      "attack": 58,
+      "defense": 85,
+      "spAttack": 105,
+      "spDefense": 95,
+      "speed": 62
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["root_control", "overgrowth_field"],
+    "hiddenAbility": "deep_roots",
+    "evolution": null,
+    "evolutionLine": ["patapim", "patapim_turbo", "brr_brr_patapim"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "vine_tap" },
+      { "level": 1, "moveId": "slow_spores" },
+      { "level": 6, "moveId": "root_nudge" },
+      { "level": 10, "moveId": "nature_guard" },
+      { "level": 14, "moveId": "entangle" },
+      { "level": 20, "moveId": "binding_roots" },
+      { "level": 26, "moveId": "growth_drain" },
+      { "level": 32, "moveId": "control_field" },
+      { "level": 38, "moveId": "brr_brr_overgrowth" },
+      { "level": 44, "moveId": "root_prison" },
+      { "level": 50, "moveId": "absolute_control" }
+    ],
+    "signatureMoveFamily": "patapim"
+  }
+]

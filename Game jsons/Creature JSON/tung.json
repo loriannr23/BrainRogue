@@ -1,0 +1,116 @@
+[
+  {
+    "id": "tungling",
+    "name": "Tungling",
+    "stage": 1,
+    "types": ["Sound"],
+    "rarity": "common",
+    "role": "early_speed_setup",
+    "spriteKey": "tungling",
+    "catchable": true,
+    "description": "A small rhythm creature that taps constantly. Weak at first, but it learns the first beats of the Tung technique.",
+    "baseStats": {
+      "hp": 45,
+      "attack": 52,
+      "defense": 38,
+      "spAttack": 40,
+      "spDefense": 40,
+      "speed": 72
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["rhythm_start"],
+    "hiddenAbility": "echo_soul",
+    "evolution": {
+      "evolvesTo": "sahur_drummer",
+      "method": "level",
+      "level": 16
+    },
+    "evolutionLine": ["tungling", "sahur_drummer", "tung_tung_tung_sahur"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "tung_hit" },
+      { "level": 1, "moveId": "noise_ping" },
+      { "level": 6, "moveId": "quick_beat" },
+      { "level": 10, "moveId": "focus_rhythm" },
+      { "level": 14, "moveId": "double_tung" }
+    ],
+    "signatureMoveFamily": "tung"
+  },
+  {
+    "id": "sahur_drummer",
+    "name": "Sahur Drummer",
+    "stage": 2,
+    "types": ["Sound"],
+    "rarity": "uncommon",
+    "role": "midgame_scaling_attacker",
+    "spriteKey": "sahur_drummer",
+    "catchable": true,
+    "description": "A louder and more focused evolution that turns every beat into momentum. The longer a fight lasts, the more dangerous it becomes.",
+    "baseStats": {
+      "hp": 65,
+      "attack": 70,
+      "defense": 55,
+      "spAttack": 68,
+      "spDefense": 58,
+      "speed": 82
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["rhythm_start", "echo_scaling"],
+    "hiddenAbility": "echo_soul",
+    "evolution": {
+      "evolvesTo": "tung_tung_tung_sahur",
+      "method": "level",
+      "level": 36
+    },
+    "evolutionLine": ["tungling", "sahur_drummer", "tung_tung_tung_sahur"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "tung_hit" },
+      { "level": 1, "moveId": "noise_ping" },
+      { "level": 6, "moveId": "quick_beat" },
+      { "level": 10, "moveId": "focus_rhythm" },
+      { "level": 14, "moveId": "double_tung" },
+      { "level": 18, "moveId": "beat_down" },
+      { "level": 24, "moveId": "rhythm_charge" },
+      { "level": 30, "moveId": "resonance_burst" },
+      { "level": 35, "moveId": "echo_build_up" }
+    ],
+    "signatureMoveFamily": "tung"
+  },
+  {
+    "id": "tung_tung_tung_sahur",
+    "name": "Tung Tung Tung Sahur",
+    "stage": 3,
+    "types": ["Sound", "Chaos"],
+    "rarity": "rare",
+    "role": "late_game_scaling_carry",
+    "spriteKey": "tung_tung_tung_sahur",
+    "catchable": false,
+    "description": "The final form of the Tung rhythm. Every hit echoes into the next, turning long battles into unstoppable chaos.",
+    "baseStats": {
+      "hp": 82,
+      "attack": 82,
+      "defense": 72,
+      "spAttack": 112,
+      "spDefense": 78,
+      "speed": 88
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["echo_scaling", "rhythm_overflow"],
+    "hiddenAbility": "ancient_echo",
+    "evolution": null,
+    "evolutionLine": ["tungling", "sahur_drummer", "tung_tung_tung_sahur"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "tung_hit" },
+      { "level": 1, "moveId": "noise_ping" },
+      { "level": 6, "moveId": "quick_beat" },
+      { "level": 10, "moveId": "focus_rhythm" },
+      { "level": 14, "moveId": "double_tung" },
+      { "level": 18, "moveId": "beat_down" },
+      { "level": 24, "moveId": "rhythm_charge" },
+      { "level": 30, "moveId": "resonance_burst" },
+      { "level": 36, "moveId": "tung_echo_barrage" },
+      { "level": 42, "moveId": "chaos_beat" },
+      { "level": 50, "moveId": "rhythm_overdrive" }
+    ],
+    "signatureMoveFamily": "tung"
+  }
+]

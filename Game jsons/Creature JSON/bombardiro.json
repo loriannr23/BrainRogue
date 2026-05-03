@@ -1,0 +1,115 @@
+[
+  {
+    "id": "croclet",
+    "name": "Croclet",
+    "stage": 1,
+    "types": ["Metal"],
+    "rarity": "common",
+    "role": "early_physical_attacker",
+    "spriteKey": "croclet",
+    "catchable": true,
+    "description": "A small crocodile wearing a pilot helmet. It dreams of taking to the skies, but for now fights on the ground.",
+    "baseStats": {
+      "hp": 55,
+      "attack": 65,
+      "defense": 50,
+      "spAttack": 40,
+      "spDefense": 45,
+      "speed": 50
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["stable_frame"],
+    "hiddenAbility": "early_thrusters",
+    "evolution": {
+      "evolvesTo": "bombardiro",
+      "method": "level",
+      "level": 20
+    },
+    "evolutionLine": ["croclet", "bombardiro", "bombardiro_crocodilo"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "metal_bite" },
+      { "level": 1, "moveId": "pilot_strike" },
+      { "level": 7, "moveId": "gear_charge" },
+      { "level": 12, "moveId": "ram_attack" },
+      { "level": 18, "moveId": "target_lock" }
+    ],
+    "signatureMoveFamily": "bombardiro"
+  },
+  {
+    "id": "bombardiro",
+    "name": "Bombardiro",
+    "stage": 2,
+    "types": ["Metal", "Fire"],
+    "rarity": "uncommon",
+    "role": "midgame_burst_attacker",
+    "spriteKey": "bombardiro",
+    "catchable": true,
+    "description": "Now equipped with heavy artillery, it trades mobility for destructive firepower.",
+    "baseStats": {
+      "hp": 75,
+      "attack": 90,
+      "defense": 70,
+      "spAttack": 60,
+      "spDefense": 60,
+      "speed": 55
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["overheat_core"],
+    "hiddenAbility": "pressure_shell",
+    "evolution": {
+      "evolvesTo": "bombardiro_crocodilo",
+      "method": "level",
+      "level": 40
+    },
+    "evolutionLine": ["croclet", "bombardiro", "bombardiro_crocodilo"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "metal_bite" },
+      { "level": 1, "moveId": "pilot_strike" },
+      { "level": 7, "moveId": "gear_charge" },
+      { "level": 12, "moveId": "ram_attack" },
+      { "level": 18, "moveId": "target_lock" },
+      { "level": 22, "moveId": "bomb_launch" },
+      { "level": 28, "moveId": "heat_burst" },
+      { "level": 34, "moveId": "recoil_strike" }
+    ],
+    "signatureMoveFamily": "bombardiro"
+  },
+  {
+    "id": "bombardiro_crocodilo",
+    "name": "Bombardiro Crocodilo",
+    "stage": 3,
+    "types": ["Metal", "Fire"],
+    "rarity": "rare",
+    "role": "late_game_glass_cannon",
+    "spriteKey": "bombardiro_crocodilo",
+    "catchable": false,
+    "description": "A terrifying fusion of machine and beast, it rains destruction from above at the cost of its own stability.",
+    "baseStats": {
+      "hp": 85,
+      "attack": 120,
+      "defense": 70,
+      "spAttack": 95,
+      "spDefense": 65,
+      "speed": 80
+    },
+    "growthRate": "medium_fast",
+    "abilities": ["overheat_core", "overload_engine"],
+    "hiddenAbility": "last_stand_protocol",
+    "evolution": null,
+    "evolutionLine": ["croclet", "bombardiro", "bombardiro_crocodilo"],
+    "levelUpMoves": [
+      { "level": 1, "moveId": "metal_bite" },
+      { "level": 1, "moveId": "pilot_strike" },
+      { "level": 7, "moveId": "gear_charge" },
+      { "level": 12, "moveId": "ram_attack" },
+      { "level": 18, "moveId": "target_lock" },
+      { "level": 22, "moveId": "bomb_launch" },
+      { "level": 28, "moveId": "heat_burst" },
+      { "level": 34, "moveId": "recoil_strike" },
+      { "level": 40, "moveId": "bombardment" },
+      { "level": 46, "moveId": "overload_blast" },
+      { "level": 52, "moveId": "airstrike_rush" }
+    ],
+    "signatureMoveFamily": "bombardiro"
+  }
+]

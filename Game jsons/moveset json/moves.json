@@ -1,0 +1,274 @@
+[
+  {
+    "id": "tung_hit",
+    "name": "Tung Hit",
+    "type": "Sound",
+    "category": "physical",
+    "power": 50,
+    "accuracy": 100,
+    "pp": 30,
+    "effects": []
+  },
+  {
+    "id": "double_tung",
+    "name": "Double Tung",
+    "type": "Sound",
+    "category": "physical",
+    "power": 30,
+    "accuracy": 95,
+    "pp": 20,
+    "multiHit": [2,2],
+    "effects": []
+  },
+  {
+    "id": "tung_echo_barrage",
+    "name": "Tung Echo Barrage",
+    "type": "Sound",
+    "category": "special",
+    "power": 25,
+    "accuracy": 90,
+    "pp": 10,
+    "multiHit": [3,5],
+    "effects": [
+      {
+        "type": "echo_scaling",
+        "chance": 100,
+        "value": 1,
+        "target": "self"
+      }
+    ]
+  },
+  {
+    "id": "resonance_burst",
+    "name": "Resonance Burst",
+    "type": "Sound",
+    "category": "special",
+    "power": 80,
+    "accuracy": 95,
+    "pp": 15,
+    "effects": []
+  },
+
+  {
+    "id": "vine_tap",
+    "name": "Vine Tap",
+    "type": "Nature",
+    "category": "physical",
+    "power": 45,
+    "accuracy": 100,
+    "pp": 30,
+    "effects": []
+  },
+  {
+    "id": "slow_spores",
+    "name": "Slow Spores",
+    "type": "Nature",
+    "category": "status",
+    "power": 0,
+    "accuracy": 95,
+    "pp": 20,
+    "effects": [
+      {
+        "type": "speed_down",
+        "chance": 100,
+        "value": 1,
+        "target": "opponent"
+      }
+    ]
+  },
+  {
+    "id": "entangle",
+    "name": "Entangle",
+    "type": "Nature",
+    "category": "status",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 15,
+    "effects": [
+      {
+        "type": "rooted",
+        "chance": 100,
+        "target": "opponent",
+        "duration": 3
+      }
+    ]
+  },
+  {
+    "id": "binding_roots",
+    "name": "Binding Roots",
+    "type": "Nature",
+    "category": "special",
+    "power": 60,
+    "accuracy": 95,
+    "pp": 15,
+    "effects": [
+      {
+        "type": "root_synergy",
+        "chance": 100,
+        "target": "opponent",
+        "duration": 2
+      }
+    ]
+  },
+
+  {
+    "id": "metal_bite",
+    "name": "Metal Bite",
+    "type": "Metal",
+    "category": "physical",
+    "power": 60,
+    "accuracy": 95,
+    "pp": 25,
+    "effects": []
+  },
+  {
+    "id": "ram_attack",
+    "name": "Ram Attack",
+    "type": "Metal",
+    "category": "physical",
+    "power": 75,
+    "accuracy": 90,
+    "pp": 20,
+    "effects": [
+      {
+        "type": "minor_recoil",
+        "chance": 100,
+        "target": "self"
+      }
+    ]
+  },
+  {
+    "id": "bomb_launch",
+    "name": "Bomb Launch",
+    "type": "Fire",
+    "category": "physical",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 10,
+    "effects": [
+      {
+        "type": "recoil",
+        "chance": 100,
+        "target": "self"
+      }
+    ]
+  },
+  {
+    "id": "overload_blast",
+    "name": "Overload Blast",
+    "type": "Fire",
+    "category": "special",
+    "power": 120,
+    "accuracy": 75,
+    "pp": 5,
+    "effects": [
+      {
+        "type": "heavy_recoil",
+        "chance": 100,
+        "target": "self"
+      }
+    ]
+  },
+
+  {
+    "id": "splash_tap",
+    "name": "Splash Tap",
+    "type": "Water",
+    "category": "special",
+    "power": 50,
+    "accuracy": 100,
+    "pp": 30,
+    "effects": []
+  },
+  {
+    "id": "aqua_flow",
+    "name": "Aqua Flow",
+    "type": "Water",
+    "category": "special",
+    "power": 70,
+    "accuracy": 95,
+    "pp": 20,
+    "effects": [
+      {
+        "type": "minor_heal",
+        "chance": 100,
+        "target": "self"
+      }
+    ]
+  },
+
+  {
+    "id": "mini_boost",
+    "name": "Mini Boost",
+    "type": "Sound",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 25,
+    "effects": [
+      {
+        "type": "attack_up",
+        "chance": 100,
+        "value": 1,
+        "target": "self"
+      }
+    ]
+  },
+  {
+    "id": "speed_boost",
+    "name": "Speed Boost",
+    "type": "Sound",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "effects": [
+      {
+        "type": "speed_up",
+        "chance": 100,
+        "value": 1,
+        "target": "self"
+      }
+    ]
+  },
+  {
+    "id": "stack_boost",
+    "name": "Stack Boost",
+    "type": "Sound",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "effects": [
+      {
+        "type": "attack_up",
+        "chance": 100,
+        "value": 1,
+        "target": "self"
+      },
+      {
+        "type": "speed_up",
+        "chance": 100,
+        "value": 1,
+        "target": "self"
+      }
+    ]
+  },
+
+  {
+    "id": "symphony_boost",
+    "name": "Symphony Boost",
+    "type": "Sound",
+    "category": "status",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "effects": [
+      {
+        "type": "rhythm_scaling_buff",
+        "chance": 100,
+        "target": "self"
+      }
+    ]
+  }
+]

@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "emerald";
+  src: url("/assets/pokerogue/pokerogue-assets-dcb995ad78b738f82da5c9be2f4e771c5afe6368/pokerogue-assets-dcb995ad78b738f82da5c9be2f4e771c5afe6368/fonts/pokemon-emerald-pro.ttf") format("truetype");
+  font-display: block;
+}
+
+@font-face {
+  font-family: "pkmnems";
+  src: url("/assets/pokerogue/pokerogue-assets-dcb995ad78b738f82da5c9be2f4e771c5afe6368/pokerogue-assets-dcb995ad78b738f82da5c9be2f4e771c5afe6368/fonts/pkmnems.ttf") format("truetype");
+  font-display: block;
+}
+
+html,
+body,
+#game {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: #0b1220;
+  overflow: hidden;
+  font-family: "emerald", "Trebuchet MS", Arial, sans-serif;
+}
+
+#game {
+  position: fixed;
+  inset: 0;
+}
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
