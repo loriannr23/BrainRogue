@@ -109,12 +109,11 @@ export const SPRITE_SHEET_MAPPINGS = {
     shadow: { x: 1265, y: 626, width: 199, height: 204 },
   } satisfies Record<CreatureType, CropRect>,
   rewards: {
-    heal: { x: 125, y: 200, width: 254, height: 316 },
+    healing: { x: 125, y: 200, width: 254, height: 316 },
     statBoost: { x: 506, y: 200, width: 299, height: 302 },
-    newMove: { x: 928, y: 210, width: 330, height: 262 },
-    fullHeal: { x: 1339, y: 208, width: 350, height: 288 },
-    rareItem: { x: 1339, y: 208, width: 350, height: 288 },
-    evolutionItem: { x: 1339, y: 208, width: 350, height: 288 },
+    moveLearning: { x: 928, y: 210, width: 330, height: 262 },
+    typeBoost: { x: 1339, y: 208, width: 350, height: 288 },
+    rareUpgrade: { x: 1339, y: 208, width: 350, height: 288 },
     currency: { x: 1785, y: 208, width: 265, height: 308 },
   } satisfies Record<RewardKind, CropRect>,
   battleCommands: {

@@ -60,7 +60,14 @@ export class LocalSaveService implements SaveService {
       ...defaults,
       ...raw,
       unlockedStarters: unlockedStarters.length > 0 ? unlockedStarters : defaults.unlockedStarters,
-      currentRun: raw.currentRun && starterIds.includes(raw.currentRun.starterId) ? raw.currentRun : undefined,
+      currentRun: raw.currentRun && starterIds.includes(raw.currentRun.starterId)
+        ? {
+            ...raw.currentRun,
+            modifiers: {
+              typeBoosts: raw.currentRun.modifiers?.typeBoosts ?? {},
+            },
+          }
+        : undefined,
       discoveredCreatures: raw.discoveredCreatures ?? defaults.discoveredCreatures,
       metaUpgrades: {
         ...defaults.metaUpgrades,

@@ -1,4 +1,8 @@
-import { CreatureInstance } from './creature';
+import { CreatureInstance, CreatureType } from './creature';
+
+export interface RunModifiers {
+  typeBoosts: Partial<Record<CreatureType, number>>;
+}
 
 export interface RunState {
   starterId: string;
@@ -6,6 +10,7 @@ export interface RunState {
   wave: number;
   currency: number;
   seed: string;
+  modifiers?: RunModifiers;
 }
 
 export interface SaveData {

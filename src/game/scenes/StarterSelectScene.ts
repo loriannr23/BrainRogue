@@ -374,6 +374,7 @@ export class StarterSelectScene extends Phaser.Scene {
       wave: 1,
       currency: 0,
       seed: Date.now().toString(36),
+      modifiers: { typeBoosts: {} },
     });
     this.scene.start('BattleScene');
   }

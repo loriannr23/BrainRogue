@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { getMove } from '../../data/moves';
 import { GameState } from '../../systems/GameState';
+import { LearnMoveSystem } from '../../systems/progression/LearnMoveSystem';
 import { RewardOption, RewardSystem } from '../../systems/progression/RewardSystem';
 import { rewardIconKey, UI_ASSETS } from '../../systems/assets/UiAssetRegistry';
 import { FxManager } from '../../systems/fx/FxManager';
@@ -33,6 +34,7 @@ interface RewardLayout {
 
 export class RewardScene extends Phaser.Scene {
   private readonly rewards = new RewardSystem();
+  private readonly learnMoves = new LearnMoveSystem();
   private readonly waves = new WaveSystem();
   private readonly interactionLock = new InteractionLock('RewardScene');
   private selectedIndex = 0;
@@ -77,7 +79,7 @@ export class RewardScene extends Phaser.Scene {
     const creature = run.party[0];
     gameState.updateBestWave(run.wave);
     gameState.persist();
-    this.rewardOptions = this.rewards.createRewards(run.wave, creature);
+    this.rewardOptions = this.rewards.createRewards(run.wave, creature, this.waves.isBossWave(run.wave));
 
     this.drawBackground(layout);
     this.drawHeader(layout, run, data.progressionMessages ?? []);
@@ -296,8 +298,9 @@ export class RewardScene extends Phaser.Scene {
     if (reward.currency) {
       run.currency += reward.currency;
     }
-    if (reward.healAmount) {
-      creature.currentHp = Math.min(creature.stats.hp, creature.currentHp + reward.healAmount);
+    if (reward.healPercent) {
+      const healAmount = Math.ceil(creature.stats.hp * reward.healPercent);
+      creature.currentHp = Math.min(creature.stats.hp, creature.currentHp + healAmount);
     }
     if (reward.fullHeal) {
       creature.currentHp = creature.stats.hp;
@@ -314,13 +317,12 @@ export class RewardScene extends Phaser.Scene {
       }
     }
     if (reward.moveId) {
-      const learnedMove = getMove(reward.moveId);
-      const slot = { moveId: learnedMove.id, currentPp: learnedMove.pp, maxPp: learnedMove.pp };
-      if (creature.moves.length >= 4) {
-        creature.moves.shift();
-      }
-      creature.moves.push(slot);
-      creature.moveIds = creature.moves.map((entry) => entry.moveId);
+      this.learnMoves.learnMove(creature, reward.moveId, creature.moves.length >= 4 ? 0 : undefined);
+    }
+    if (reward.typeBoost) {
+      run.modifiers ??= { typeBoosts: {} };
+      const current = run.modifiers.typeBoosts[reward.typeBoost.type] ?? 1;
+      run.modifiers.typeBoosts[reward.typeBoost.type] = Math.max(current, reward.typeBoost.multiplier);
     }
 
     run.wave += 1;
@@ -353,11 +355,12 @@ export class RewardScene extends Phaser.Scene {
   private effectText(reward: RewardOption): string {
     if (reward.currency) return `Effect: gain ${reward.currency} run coins.`;
     if (reward.fullHeal) return 'Effect: fully restore HP and clear status.';
-    if (reward.healAmount) return `Effect: restore ${reward.healAmount} HP.`;
+    if (reward.healPercent) return `Effect: restore ${Math.round(reward.healPercent * 100)}% HP.`;
     if (reward.statBoost) {
       return `Effect: ${Object.entries(reward.statBoost).map(([stat, amount]) => `${stat} +${amount}`).join(', ')}.`;
     }
-    if (reward.moveId) return `Effect: learn ${reward.moveId}.`;
+    if (reward.moveId) return `Effect: learn ${getMove(reward.moveId).name}${(this.run?.party[0]?.moves.length ?? 0) >= 4 ? ', replacing the oldest move' : ''}.`;
+    if (reward.typeBoost) return `Effect: ${reward.typeBoost.type} moves deal +${Math.round((reward.typeBoost.multiplier - 1) * 100)}% damage.`;
     return reward.source ? `Effect: ${reward.source}.` : 'Effect: applies immediately.';
   }
 

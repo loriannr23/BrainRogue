@@ -5,9 +5,12 @@ import { CreatureAnimator } from '../../systems/battle/CreatureAnimator';
 import { GameState } from '../../systems/GameState';
 import { EvolutionSystem } from '../../systems/progression/EvolutionSystem';
 import { ExperienceSystem } from '../../systems/progression/ExperienceSystem';
+import { LearnMoveSystem, MAX_CREATURE_MOVES } from '../../systems/progression/LearnMoveSystem';
 import { WaveSystem } from '../../systems/progression/WaveSystem';
 import { BattleFeedbackEvent, BattleState } from '../../types/battle';
 import { BattleEvent } from '../../types/battle';
+import { CreatureInstance } from '../../types/creature';
+import { MoveId } from '../../types/move';
 import { BattleUI, BattleUILayout, RectLayout } from '../../ui/BattleUI';
 import { getMove } from '../../data/moves';
 import { resolveCreatureFrontKey } from '../../systems/assets/CreatureAssetRegistry';
@@ -40,6 +43,7 @@ export class BattleScene extends Phaser.Scene {
   private readonly waveSystem = new WaveSystem();
   private readonly experience = new ExperienceSystem();
   private readonly evolution = new EvolutionSystem();
+  private readonly learnMoves = new LearnMoveSystem();
   private battle?: BattleState;
   private ui?: BattleUI;
   private playerSprite?: Phaser.GameObjects.Image;
@@ -55,6 +59,7 @@ export class BattleScene extends Phaser.Scene {
   private layout?: BattleSceneLayout;
   private readonly interactionLock = new InteractionLock('BattleScene');
   private advanceBattleMessage?: () => void;
+  private progressionPromptInput?: (event: KeyboardEvent) => void;
 
   constructor() {
     super('BattleScene');
@@ -160,6 +165,11 @@ export class BattleScene extends Phaser.Scene {
 
   private handleKeyboard(event: KeyboardEvent): void {
     if (this.interactionLock.isLocked) {
+      if (this.progressionPromptInput) {
+        event.preventDefault();
+        this.progressionPromptInput(event);
+        return;
+      }
       if (this.advanceBattleMessage && (event.code === 'Enter' || event.code === 'Space')) {
         event.preventDefault();
         this.advanceBattleMessage();
@@ -229,9 +239,8 @@ export class BattleScene extends Phaser.Scene {
       return [];
     }
 
-    const xpMessages = this.experience.awardXp(creature, state.enemy.level, state.isBoss);
-    const evolutionMessages = this.evolution.tryEvolve(creature);
-    const progressionMessages = [...xpMessages, ...evolutionMessages];
+    const xpResult = this.experience.awardXp(creature, state.enemy.level, state.isBoss);
+    const progressionMessages = [...xpResult.messages];
     const levelUpEvents: BattleFeedbackEvent[] = progressionMessages
       .filter((message) => message.includes('reached level'))
       .map((message) => ({
@@ -241,13 +250,87 @@ export class BattleScene extends Phaser.Scene {
       }));
 
     state.feedbackEvents.push(...levelUpEvents);
-    state.log = [...state.log, ...progressionMessages].slice(-18);
     GameState.get().persist();
 
-    for (const message of progressionMessages) {
+    for (const message of xpResult.messages) {
       await this.showBattleLogMessage(message, 220);
     }
+
+    for (const levelUp of xpResult.levelUps) {
+      for (const moveId of levelUp.moveIds) {
+        const learnMessages = await this.processLevelUpMove(creature, moveId);
+        progressionMessages.push(...learnMessages);
+      }
+    }
+
+    const evolutionResult = this.evolution.tryEvolve(creature);
+    if (evolutionResult.evolved) {
+      progressionMessages.push(...evolutionResult.messages);
+      await this.playEvolutionMessages(evolutionResult.messages);
+      this.refreshPlayerSprite(creature);
+      this.ui?.renderVitals(state);
+    }
+
+    state.log = [...state.log, ...progressionMessages].slice(-18);
     return progressionMessages;
+  }
+
+  private async processLevelUpMove(creature: CreatureInstance, moveId: MoveId): Promise<string[]> {
+    if (!this.learnMoves.canLearnMove(creature, moveId)) {
+      return [];
+    }
+
+    const move = getMove(moveId);
+    await this.showBattleLogMessage(`${creature.name} wants to learn ${move.name}.`, 360);
+
+    if (creature.moves.length < MAX_CREATURE_MOVES) {
+      const result = this.learnMoves.learnMove(creature, moveId);
+      GameState.get().persist();
+      for (const message of result.messages) {
+        await this.showBattleLogMessage(message, 520);
+      }
+      return result.messages;
+    }
+
+    await this.showBattleLogMessage(`However, ${creature.name} already knows four moves.`, 360);
+    const shouldReplace = await this.promptBinary(`Replace a move with ${move.name}?`);
+    if (!shouldReplace) {
+      const result = this.learnMoves.learnMove(creature, moveId);
+      for (const message of result.messages) {
+        await this.showBattleLogMessage(message, 520);
+      }
+      return result.messages;
+    }
+
+    const replacementIndex = await this.promptMoveReplacement(creature, moveId);
+    const result = this.learnMoves.learnMove(creature, moveId, replacementIndex);
+    GameState.get().persist();
+    for (const message of result.messages) {
+      await this.showBattleLogMessage(message, 520);
+    }
+    return result.messages;
+  }
+
+  private async playEvolutionMessages(messages: string[]): Promise<void> {
+    for (const message of messages) {
+      await this.showBattleLogMessage(message, message.startsWith('What?') ? 760 : 900);
+    }
+  }
+
+  private refreshPlayerSprite(creature: CreatureInstance): void {
+    if (!this.playerSprite || !this.layout) return;
+    const render = getCreatureRenderMetadata(creature.definitionId);
+    this.playerSprite.setTexture(resolveCreatureFrontKey(this, creature.definitionId));
+    this.playerSprite.setY(this.layout.playerSprite.y + (render.battleYOffset ?? 0));
+    fitSpriteToBox(this.playerSprite, this.layout.playerSprite.maxWidth, this.layout.playerSprite.maxHeight, render.battleScaleMax ?? this.layout.playerSprite.maxScale);
+    this.playerSprite.setVisible(true);
+    this.playerAnimator?.destroy();
+    this.playerAnimator = new CreatureAnimator(this, this.playerSprite, {
+      attackDirection: 1,
+      idleDistance: 3,
+      idleDuration: 1300,
+      hurtDistance: 16,
+    });
   }
 
   private async animateBattleEvent(event: BattleEvent): Promise<void> {
@@ -377,6 +460,82 @@ export class BattleScene extends Phaser.Scene {
       };
       this.advanceBattleMessage = finish;
       this.time.delayedCall(autoAdvanceMs, finish);
+    });
+  }
+
+  private promptBinary(question: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      let selected = 0;
+      const render = () => {
+        this.ui?.renderLog([question, `${selected === 0 ? '> ' : '  '}Yes     ${selected === 1 ? '> ' : '  '}No`]);
+      };
+      const finish = (value: boolean) => {
+        this.progressionPromptInput = undefined;
+        playSoundHook(this, value ? 'ui_confirm' : 'ui_back');
+        resolve(value);
+      };
+      this.progressionPromptInput = (event) => {
+        if (event.code === 'ArrowLeft' || event.code === 'KeyA') {
+          selected = 0;
+          playSoundHook(this, 'ui_move');
+          render();
+          return;
+        }
+        if (event.code === 'ArrowRight' || event.code === 'KeyD') {
+          selected = 1;
+          playSoundHook(this, 'ui_move');
+          render();
+          return;
+        }
+        if (event.code === 'Escape' || event.code === 'Backspace') {
+          finish(false);
+          return;
+        }
+        if (event.code === 'Enter' || event.code === 'Space') {
+          finish(selected === 0);
+        }
+      };
+      render();
+    });
+  }
+
+  private promptMoveReplacement(creature: CreatureInstance, moveId: MoveId): Promise<number | undefined> {
+    return new Promise((resolve) => {
+      const move = getMove(moveId);
+      let selected = 0;
+      const optionCount = creature.moves.length + 1;
+      const render = () => {
+        const selectedMove = creature.moves[selected];
+        const option = selectedMove ? `Forget ${getMove(selectedMove.moveId).name}` : `Do not learn ${move.name}`;
+        this.ui?.renderLog(['Which move should be forgotten?', `${option}  <-/-> Enter`]);
+      };
+      const finish = (index?: number) => {
+        this.progressionPromptInput = undefined;
+        playSoundHook(this, index === undefined ? 'ui_back' : 'ui_confirm');
+        resolve(index);
+      };
+      this.progressionPromptInput = (event) => {
+        if (event.code === 'ArrowLeft' || event.code === 'KeyA' || event.code === 'ArrowUp' || event.code === 'KeyW') {
+          selected = Phaser.Math.Wrap(selected - 1, 0, optionCount);
+          playSoundHook(this, 'ui_move');
+          render();
+          return;
+        }
+        if (event.code === 'ArrowRight' || event.code === 'KeyD' || event.code === 'ArrowDown' || event.code === 'KeyS') {
+          selected = Phaser.Math.Wrap(selected + 1, 0, optionCount);
+          playSoundHook(this, 'ui_move');
+          render();
+          return;
+        }
+        if (event.code === 'Escape' || event.code === 'Backspace') {
+          finish(undefined);
+          return;
+        }
+        if (event.code === 'Enter' || event.code === 'Space') {
+          finish(selected >= creature.moves.length ? undefined : selected);
+        }
+      };
+      render();
     });
   }
 

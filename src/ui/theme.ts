@@ -99,7 +99,8 @@ export const RARITY_COLORS: Record<RewardRarity, number> = {
   common: 0xcdd6e0,
   uncommon: 0xcdd6e0,
   rare: 0xcdd6e0,
-  epic: 0xcdd6e0,
+  ultra: 0xcdd6e0,
+  master: 0xcdd6e0,
 };
 
 export const colorToCss = (color: number): string => `#${color.toString(16).padStart(6, '0')}`;

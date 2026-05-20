@@ -2,6 +2,7 @@ import { CreatureInstance } from '../../types/creature';
 import { DamageResult } from '../../types/battle';
 import { MoveDefinition } from '../../types/move';
 import { chance } from '../../utils/random';
+import { GameState } from '../GameState';
 import { getAccuracyMultiplier, getEffectiveBattleStat } from './StatStages';
 import { calculateDamage } from './damageSystem';
 
@@ -42,12 +43,13 @@ export class DamageCalculator {
       return { damage: 0, isCrit: false, effectiveness, missed: false, move };
     }
     const stab = attacker.types.includes(move.type) ? 1.5 : 1;
+    const runTypeBoost = this.getRunTypeBoost(attacker, move);
     const critChance = DEFAULT_CRIT_CHANCE_PERCENT + (attacker.effectStacks?.crit ?? 0) * CRIT_STAGE_BONUS_PERCENT;
     const isCrit = chance(critChance);
     const crit = isCrit ? CRIT_DAMAGE_MULTIPLIER : 1;
     const isBurned = attacker.status === 'burn';
     const burnPenalty = isBurned && move.category === 'physical' ? 0.5 : 1;
-    const damage = Math.max(1, Math.floor(calculated.damage * stab * crit * burnPenalty));
+    const damage = Math.max(1, Math.floor(calculated.damage * stab * runTypeBoost * crit * burnPenalty));
 
     if (import.meta.env.DEV) {
       console.log('[battle:damage]', {
@@ -64,11 +66,20 @@ export class DamageCalculator {
         finalDamage: damage,
         typeMultiplier: effectiveness,
         stab,
+        runTypeBoost,
         crit,
         burnPenalty,
       });
     }
 
     return { damage, isCrit, effectiveness, missed: false, move };
+  }
+
+  private getRunTypeBoost(attacker: CreatureInstance, move: MoveDefinition): number {
+    const run = GameState.get().save.currentRun;
+    if (!run?.party.some((creature) => creature.instanceId === attacker.instanceId)) {
+      return 1;
+    }
+    return run.modifiers?.typeBoosts[move.type] ?? 1;
   }
 }

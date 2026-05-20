@@ -9,6 +9,17 @@ const growthMultiplier = {
   slow: 1.25,
 };
 
+export interface LevelUpResult {
+  fromLevel: number;
+  toLevel: number;
+  moveIds: string[];
+}
+
+export interface ExperienceAwardResult {
+  messages: string[];
+  levelUps: LevelUpResult[];
+}
+
 export class ExperienceSystem {
   createCreature(definitionId: string, level: number): CreatureInstance {
     const definition = getCreature(definitionId);
@@ -57,21 +68,36 @@ export class ExperienceSystem {
     };
   }
 
-  awardXp(creature: CreatureInstance, enemyLevel: number, isBoss: boolean): string[] {
-    const definition = getCreature(creature.definitionId);
+  getLevelUpMoveIds(definitionId: string, fromLevel: number, toLevel: number): string[] {
+    const definition = getCreature(definitionId);
+    const moveIds = definition.levelUpMoves
+      .filter((entry) => entry.level >= fromLevel && entry.level <= toLevel)
+      .sort((a, b) => a.level - b.level)
+      .map((entry) => entry.moveId);
+    return [...new Set(moveIds)];
+  }
+
+  awardXp(creature: CreatureInstance, enemyLevel: number, isBoss: boolean): ExperienceAwardResult {
     const gained = Math.floor(enemyLevel * (isBoss ? 18 : 10));
     const messages = [`${creature.name} gained ${gained} XP.`];
+    const levelUps: LevelUpResult[] = [];
     creature.xp += gained;
 
-    while (creature.xp >= this.xpForLevel(creature.level + 1, definition.growthRate)) {
+    while (creature.xp >= this.xpForLevel(creature.level + 1, getCreature(creature.definitionId).growthRate)) {
+      const fromLevel = creature.level;
       creature.level += 1;
       const oldMaxHp = creature.stats.hp;
       creature.stats = this.recalculateStats(creature.definitionId, creature.level);
       creature.currentHp += creature.stats.hp - oldMaxHp;
       messages.push(`${creature.name} reached level ${creature.level}.`);
+      levelUps.push({
+        fromLevel,
+        toLevel: creature.level,
+        moveIds: this.getLevelUpMoveIds(creature.definitionId, fromLevel + 1, creature.level),
+      });
     }
 
-    return messages;
+    return { messages, levelUps };
   }
 
   private scaleStats(baseStats: Stats, level: number): Stats {
